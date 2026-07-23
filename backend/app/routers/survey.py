@@ -4,20 +4,28 @@ from app.schemas.survey_schema import SurveyCreate
 from app.services.survey_service import create_survey
 from app.utils.auth import get_current_user
 
-<<<<<<< HEAD
-from app.schemas.survey_schema import SurveyCreate, SurveyUpdate
+from app.schemas.survey_schema import (
+    SurveyCreate,
+    SurveyUpdate,
+    QuestionCreate,
+    QuestionUpdate
+)
 
 from app.services.survey_service import (
     create_survey,
     get_my_surveys,
     get_survey_by_id,
     update_survey,
-    delete_survey
-=======
-from app.services.survey_service import (
-    create_survey,
-    get_my_surveys
->>>>>>> 72db17c1166dac18a44dd1ad552f96804d42ce4d
+    delete_survey,
+    add_question,
+    get_questions,
+    update_question,
+    delete_question,
+    publish_survey,
+    close_survey,
+    get_survey_responses,
+    get_response_details,
+    get_survey_analytics
 )
 
 
@@ -42,7 +50,6 @@ def create(
 def get_surveys(
     current_user=Depends(get_current_user)
 ):
-<<<<<<< HEAD
     return get_my_surveys(current_user)
 
 
@@ -77,6 +84,119 @@ def delete(
         survey_id,
         current_user
     )
-=======
     return get_my_surveys(current_user)
->>>>>>> 72db17c1166dac18a44dd1ad552f96804d42ce4d
+
+
+@router.post("/{survey_id}/question")
+def create_question(
+    survey_id: str,
+    question: QuestionCreate,
+    current_user=Depends(get_current_user)
+):
+    return add_question(
+        survey_id,
+        question,
+        current_user
+    )
+    
+@router.get("/{survey_id}/questions")
+def questions(
+    survey_id: str,
+    current_user=Depends(get_current_user)
+):
+    return get_questions(
+        survey_id,
+        current_user
+    )
+
+@router.put("/{survey_id}/question/{question_id}")
+def update_question_route(
+    survey_id: str,
+    question_id: str,
+    question: QuestionUpdate,
+    current_user=Depends(get_current_user)
+):
+    return update_question(
+        survey_id,
+        question_id,
+        question,
+        current_user
+    )
+    
+@router.delete("/{survey_id}/question/{question_id}")
+def delete_question_route(
+    survey_id: str,
+    question_id: str,
+    current_user=Depends(get_current_user)
+):
+    return delete_question(
+        survey_id,
+        question_id,
+        current_user
+    )
+    
+@router.delete("/{survey_id}/question/{question_id}")
+def delete_question_route(
+    survey_id: str,
+    question_id: str,
+    current_user=Depends(get_current_user)
+):
+    return delete_question(
+        survey_id,
+        question_id,
+        current_user
+    )
+    
+@router.patch("/{survey_id}/publish")
+def publish(
+    survey_id: str,
+    current_user=Depends(get_current_user)
+):
+    return publish_survey(
+        survey_id,
+        current_user
+    )
+
+
+@router.patch("/{survey_id}/close")
+def close(
+    survey_id: str,
+    current_user=Depends(get_current_user)
+):
+    return close_survey(
+        survey_id,
+        current_user
+    )
+
+
+@router.get("/{survey_id}/responses")
+def get_responses(
+    survey_id: str,
+    current_user=Depends(get_current_user)
+):
+    return get_survey_responses(
+        survey_id,
+        current_user
+    )
+    
+@router.get("/{survey_id}/responses/{response_id}")
+def response_details(
+    survey_id: str,
+    response_id: str,
+    current_user=Depends(get_current_user)
+):
+    return get_response_details(
+        survey_id,
+        response_id,
+        current_user
+    )
+    
+@router.get("/{survey_id}/analytics")
+def analytics(
+    survey_id: str,
+    current_user=Depends(get_current_user)
+):
+    return get_survey_analytics(
+        survey_id,
+        current_user
+    )

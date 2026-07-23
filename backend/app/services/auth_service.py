@@ -4,11 +4,9 @@ from app.utils.password import hash_password
 from app.utils.password import verify_password
 from app.utils.jwt_handler import create_access_token
 
-<<<<<<< HEAD
+
 from bson import ObjectId
 
-=======
->>>>>>> 72db17c1166dac18a44dd1ad552f96804d42ce4d
 def register_user(user):
 
     existing_user = users_collection.find_one(
@@ -70,7 +68,7 @@ def login_user(user):
         "message": "Login successful",
         "access_token": token,
         "token_type": "bearer"
-<<<<<<< HEAD
+
     }
     
 
@@ -97,6 +95,5 @@ def get_survey_by_id(survey_id, current_user):
             "createdAt": survey["createdAt"],
             "updatedAt": survey["updatedAt"]
         }
-=======
->>>>>>> 72db17c1166dac18a44dd1ad552f96804d42ce4d
+
     }

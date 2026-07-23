@@ -7,3 +7,4 @@ db = client[DATABASE_NAME]
 
 users_collection = db["users"]
 surveys_collection = db["surveys"]
+responses_collection = db["responses"]
