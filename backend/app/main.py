@@ -1,0 +1,28 @@
+from fastapi import FastAPI
+from app.database import db
+from app.routers.auth import router as auth_router
+from app.routers.survey import router as survey_router
+
+app = FastAPI(
+    title="Survey Application API",
+    version="1.0.0"
+)
+
+app.include_router(auth_router)
+app.include_router(survey_router)
+
+
+@app.get("/")
+def home():
+    return {
+        "message": "Survey Application Backend Running 🚀"
+    }
+
+
+@app.get("/database")
+def database_status():
+    return {
+        "status": "Connected",
+        "database": db.name,
+        "collections": db.list_collection_names()
+    }
