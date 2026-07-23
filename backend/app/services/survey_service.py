@@ -28,6 +28,10 @@ def create_survey(data, current_user):
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 72db17c1166dac18a44dd1ad552f96804d42ce4d
 def get_my_surveys(current_user):
 
     surveys = surveys_collection.find(
@@ -50,6 +54,7 @@ def get_my_surveys(current_user):
 
     return survey_list
 
+<<<<<<< HEAD
 
 
 def update_survey(survey_id, data, current_user):
@@ -101,3 +106,6 @@ def delete_survey(survey_id, current_user):
         "success": True,
         "message": "Survey deleted successfully"
     }
+=======
+#####
+>>>>>>> 72db17c1166dac18a44dd1ad552f96804d42ce4d

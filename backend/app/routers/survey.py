@@ -4,6 +4,7 @@ from app.schemas.survey_schema import SurveyCreate
 from app.services.survey_service import create_survey
 from app.utils.auth import get_current_user
 
+<<<<<<< HEAD
 from app.schemas.survey_schema import SurveyCreate, SurveyUpdate
 
 from app.services.survey_service import (
@@ -12,6 +13,11 @@ from app.services.survey_service import (
     get_survey_by_id,
     update_survey,
     delete_survey
+=======
+from app.services.survey_service import (
+    create_survey,
+    get_my_surveys
+>>>>>>> 72db17c1166dac18a44dd1ad552f96804d42ce4d
 )
 
 
@@ -36,6 +42,7 @@ def create(
 def get_surveys(
     current_user=Depends(get_current_user)
 ):
+<<<<<<< HEAD
     return get_my_surveys(current_user)
 
 
@@ -70,3 +77,6 @@ def delete(
         survey_id,
         current_user
     )
+=======
+    return get_my_surveys(current_user)
+>>>>>>> 72db17c1166dac18a44dd1ad552f96804d42ce4d
