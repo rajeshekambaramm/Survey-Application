@@ -1,9 +1,3 @@
-export default function Register() {
-    return (
-        <h1>Register Page</h1>
-    );
-}
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { register } from "../../services/authService";
@@ -12,7 +6,7 @@ export default function Register() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        name: "",
+        username: "",
         email: "",
         password: ""
     });
@@ -27,39 +21,37 @@ export default function Register() {
         });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        setLoading(true);
-        setError("");
+    setLoading(true);
+    setError("");
 
-        try {
-            await register(formData);
+    try {
+        const data = await register(formData);
 
-            alert("Registration Successful!");
-
-            navigate("/");
-
-        } catch (err) {
-            setError(
-                err.response?.data?.detail ||
-                err.response?.data?.message ||
-                "Registration failed"
-            );
+        if (!data.success) {
+            setError(data.message);
+            setLoading(false);
+            return;
         }
 
-        setLoading(false);
-    };
+        alert(data.message);
 
+        navigate("/");
+
+    } catch (err) {
+        console.error(err);
+        setError("Unable to connect to server");
+    }
+
+    setLoading(false);
+};
     return (
         <div className="container mt-5">
-
             <div className="row justify-content-center">
-
                 <div className="col-md-5">
-
                     <div className="card shadow">
-
                         <div className="card-body">
 
                             <h2 className="text-center mb-4">
@@ -76,11 +68,10 @@ export default function Register() {
 
                                 <div className="mb-3">
                                     <label>Name</label>
-
                                     <input
                                         type="text"
                                         className="form-control"
-                                        name="name"
+                                        name="username"
                                         onChange={handleChange}
                                         required
                                     />
@@ -88,7 +79,6 @@ export default function Register() {
 
                                 <div className="mb-3">
                                     <label>Email</label>
-
                                     <input
                                         type="email"
                                         className="form-control"
@@ -100,7 +90,6 @@ export default function Register() {
 
                                 <div className="mb-3">
                                     <label>Password</label>
-
                                     <input
                                         type="password"
                                         className="form-control"
@@ -120,23 +109,14 @@ export default function Register() {
                             </form>
 
                             <div className="mt-3 text-center">
-
-                                Already have an account?
-
-                                <Link to="/">
-                                    {" "}Login
-                                </Link>
-
+                                Already have an account?{" "}
+                                <Link to="/">Login</Link>
                             </div>
 
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     );
 }

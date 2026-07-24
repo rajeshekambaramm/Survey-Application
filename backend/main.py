@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.database import db
 from app.routers.auth import router as auth_router
 from app.routers.survey import router as survey_router
+from app.routers.public import router as public_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
@@ -21,6 +22,7 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(survey_router)
+app.include_router(public_router)
 
 
 @app.get("/")

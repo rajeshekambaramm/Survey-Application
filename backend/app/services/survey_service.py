@@ -473,3 +473,29 @@ def get_survey_analytics(survey_id, current_user):
         "totalResponses": len(responses),
         "analytics": analytics
     }
+    
+def get_survey_by_id(survey_id, current_user):
+
+    survey = surveys_collection.find_one({
+        "_id": ObjectId(survey_id),
+        "createdBy": str(current_user["_id"])
+    })
+
+    if not survey:
+        return {
+            "success": False,
+            "message": "Survey not found"
+        }
+
+    return {
+        "success": True,
+        "survey": {
+            "id": str(survey["_id"]),
+            "title": survey["title"],
+            "description": survey["description"],
+            "questions": survey["questions"],
+            "createdAt": survey["createdAt"],
+            "updatedAt": survey["updatedAt"]
+        }
+
+    }

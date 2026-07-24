@@ -11,6 +11,9 @@ def create_access_token(data: dict):
     )
 
     payload.update({"exp": expire})
+    
+    print("JWT_SECRET_KEY:", JWT_SECRET_KEY)
+    print("ALGORITHM:", ALGORITHM)
 
     token = jwt.encode(
         payload,
