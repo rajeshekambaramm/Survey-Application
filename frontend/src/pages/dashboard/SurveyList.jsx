@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSurveys } from "../../services/surveyService";
+//import { getSurveys } from "../../services/surveyService";
+import {
+    getSurveys,
+    deleteSurvey
+} from "../../services/surveyService";
+
+import { toast } from "react-toastify";
+import { Spinner } from "react-bootstrap";
+
+import EmptyState from "../../components/common/EmptyState";
 
 
 export default function SurveyList() {
@@ -9,6 +18,10 @@ export default function SurveyList() {
 
     const [surveys, setSurveys] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const [search, setSearch] = useState("");
+    const [statusFilter, setStatusFilter] = useState("all");
+    const [sortOrder, setSortOrder] = useState("newest");
 
     useEffect(() => {
         loadSurveys();
@@ -26,10 +39,83 @@ export default function SurveyList() {
         setLoading(false);
     }
 
+const handleDelete = async (surveyId) => {
 
-    if (loading)
+    const confirmDelete = window.confirm(
+        "Delete this survey?"
+    );
 
-        return <h3>Loading...</h3>;
+    if (!confirmDelete) return;
+
+    try {
+
+        await deleteSurvey(surveyId);
+
+        loadSurveys();
+
+    } catch (error) {
+
+        console.log(error);
+
+        toast.error("Unable to delete survey.");
+
+    }
+
+};
+
+    const filteredSurveys = surveys
+    .filter((survey) => {
+
+        const matchesSearch =
+            survey.title
+                ?.toLowerCase()
+                .includes(search.toLowerCase());
+
+        const matchesStatus =
+            statusFilter === "all"
+                ? true
+                : survey.status === statusFilter;
+
+        return matchesSearch && matchesStatus;
+
+    })
+    .sort((a, b) => {
+
+        if (sortOrder === "newest") {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        }
+
+        return new Date(a.createdAt) - new Date(b.createdAt);
+
+    });
+
+    if (loading) {
+
+    return (
+
+        <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ height: "60vh" }}
+        >
+
+            <div className="text-center">
+
+                <Spinner
+                    animation="border"
+                    variant="primary"
+                />
+
+                <h5 className="mt-3">
+                    Loading Surveys...
+                </h5>
+
+            </div>
+
+        </div>
+
+    );
+
+}
 
     return (
 
@@ -48,7 +134,56 @@ export default function SurveyList() {
                     + Create Survey
                 </button>
 
-                </div>
+            </div>
+
+            <div className="row mb-3">
+
+    <div className="col-md-4">
+
+        <input
+            type="text"
+            className="form-control"
+            placeholder="Search surveys..."
+            value={search}
+            onChange={(e) =>
+                setSearch(e.target.value)
+            }
+        />
+
+    </div>
+
+    <div className="col-md-3">
+
+        <select
+            className="form-select"
+            value={statusFilter}
+            onChange={(e) =>
+                setStatusFilter(e.target.value)
+            }
+        >
+            <option value="all">All Status</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+        </select>
+
+    </div>
+
+    <div className="col-md-3">
+
+        <select
+            className="form-select"
+            value={sortOrder}
+            onChange={(e) =>
+                setSortOrder(e.target.value)
+            }
+        >
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+        </select>
+
+    </div>
+
+</div>
 
             <table className="table table-bordered table-hover">
 
@@ -70,24 +205,33 @@ export default function SurveyList() {
 
                 <tbody>
 
-                    {surveys.length === 0 ? (
+                    {filteredSurveys.length === 0 ? (
 
-                        <tr>
+    <tr>
 
-                            <td
-                                colSpan="4"
-                                className="text-center"
-                            >
+        <td colSpan="4">
 
-                                No surveys found
+            <EmptyState
 
-                            </td>
+                title="No Surveys Yet"
 
-                        </tr>
+                message="Create your first survey to start collecting responses."
 
-                    ) : (
+                buttonText="Create Survey"
 
-                        surveys.map((survey) => (
+                onClick={() =>
+                    navigate("/create-survey")
+                }
+
+            />
+
+        </td>
+
+    </tr>
+
+) : (
+
+                        filteredSurveys.map((survey) => (
 
                             <tr key={survey.id}>
 
@@ -117,14 +261,31 @@ export default function SurveyList() {
     Responses
 </button>
 
+<button
+    className="btn btn-success btn-sm me-2"
+    onClick={() =>
+        navigate(
+            `/survey/${survey.id}/analytics`
+        )
+    }
+>
+    Analytics
+</button>
+
     <button
         className="btn btn-warning btn-sm me-2"
+        onClick={() =>
+            navigate(`/edit-survey/${survey.id}`)
+        }
     >
         Edit
     </button>
 
     <button
         className="btn btn-danger btn-sm"
+        onClick={() =>
+            handleDelete(survey.id)
+        }
     >
         Delete
     </button>

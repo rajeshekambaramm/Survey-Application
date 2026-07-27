@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { getResponses } from "../../services/responseService";
+import EmptyState from "../../components/common/EmptyState";
 
 export default function SurveyResponses() {
 
@@ -46,7 +47,13 @@ export default function SurveyResponses() {
 
                     <div className="alert alert-info">
 
-                        No responses yet.
+                        <EmptyState
+
+    title="No Responses"
+
+    message="Responses will appear after participants submit this survey."
+
+/>
 
                     </div>
 
@@ -86,6 +93,17 @@ export default function SurveyResponses() {
                                     }
                                 >
                                     View Response
+                                </button>
+
+                                <button
+                                    className="btn btn-primary btn-sm"
+                                    onClick={() =>
+                                        navigate(
+                                            `/survey/${surveyId}/responses/${response.responseId}`
+                                        )
+                                    }
+                                >
+                                    View Details
                                 </button>
 
                             </div>

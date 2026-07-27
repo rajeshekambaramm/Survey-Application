@@ -8,6 +8,8 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import CreateSurvey from "../pages/dashboard/CreateSurvey";
 import QuestionBuilder from "../pages/dashboard/QuestionBuilder";
 import SurveyResponses from "../pages/dashboard/SurveyResponses";
+import ResponseDetails from "../pages/dashboard/ResponseDetails";
+import SurveyAnalytics from "../pages/dashboard/SurveyAnalytics";
 
 import DashboardLayout from "../components/layout/DashboardLayout";
 
@@ -45,6 +47,17 @@ export default function AppRoutes() {
 />
 
 <Route
+    path="/edit-survey/:surveyId"
+    element={
+        <ProtectedRoute>
+            <DashboardLayout>
+                <CreateSurvey />
+            </DashboardLayout>
+        </ProtectedRoute>
+    }
+/>
+
+<Route
     path="/survey/:surveyId/questions"
     element={
         <ProtectedRoute>
@@ -69,6 +82,29 @@ export default function AppRoutes() {
         </ProtectedRoute>
     }
 />
+
+<Route
+    path="/survey/:surveyId/responses/:responseId"
+    element={
+        <ProtectedRoute>
+            <DashboardLayout>
+                <ResponseDetails />
+            </DashboardLayout>
+        </ProtectedRoute>
+    }
+/>
+
+<Route
+    path="/survey/:surveyId/analytics"
+    element={
+        <ProtectedRoute>
+            <DashboardLayout>
+                <SurveyAnalytics />
+            </DashboardLayout>
+        </ProtectedRoute>
+    }
+/>
+
 
 
             </Routes>

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 
 export default function QuestionForm({
     onSave,
-    questionData
+    questionData,
+    loading
 }) {
 
     const [question, setQuestion] = useState(
@@ -145,10 +146,33 @@ useEffect(() => {
                     <br/>
 
                     <button
-                        className="btn btn-success"
-                    >
-                        Save Question
-                    </button>
+    className="btn btn-primary"
+    disabled={loading}
+>
+
+    {
+
+        loading
+
+            ? (
+
+                <>
+
+                    <span
+                        className="spinner-border spinner-border-sm me-2"
+                    />
+
+                    Saving...
+
+                </>
+
+            )
+
+            : "Save Question"
+
+    }
+
+</button>
 
                 </form>
 

@@ -125,3 +125,99 @@ export const publishSurvey = async (surveyId) => {
 
     return response.data;
 };
+
+// Get Response Details
+
+export const getResponseDetails = async (
+    surveyId,
+    responseId
+) => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await api.get(
+
+        `/survey/${surveyId}/responses/${responseId}`,
+
+        {
+
+            headers: {
+
+                Authorization: `Bearer ${token}`
+
+            }
+
+        }
+
+    );
+
+    return response.data;
+
+};
+
+
+// Get Survey Analytics Details
+
+export const getSurveyAnalytics = async (
+    surveyId
+) => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await api.get(
+
+        `/survey/${surveyId}/analytics`,
+
+        {
+
+            headers: {
+
+                Authorization: `Bearer ${token}`
+
+            }
+
+        }
+
+    );
+
+    return response.data;
+
+};
+
+// Delete Survey
+export const deleteSurvey = async (surveyId) => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await api.delete(
+        `/survey/${surveyId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};
+
+// Update Survey
+export const updateSurvey = async (
+    surveyId,
+    surveyData
+) => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await api.put(
+        `/survey/${surveyId}`,
+        surveyData,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};

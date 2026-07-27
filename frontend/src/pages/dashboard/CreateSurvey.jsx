@@ -1,10 +1,45 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { createSurvey } from "../../services/surveyService";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+    createSurvey,
+    updateSurvey,
+    getSurveyById
+} from "../../services/surveyService";
+import { toast } from "react-toastify";
 
 export default function CreateSurvey() {
 
     const navigate = useNavigate();
+    
+    const { surveyId } = useParams();
+    const isEdit = !!surveyId;
+
+    useEffect(() => {
+
+    if (!isEdit) return;
+
+    loadSurvey();
+
+}, []);
+
+const loadSurvey = async () => {
+
+    try {
+
+        const data = await getSurveyById(surveyId);
+
+        setFormData({
+            title: data.survey.title,
+            description: data.survey.description
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+};
 
     const [formData, setFormData] = useState({
         title: "",
@@ -29,20 +64,34 @@ export default function CreateSurvey() {
 
         try {
 
-            await createSurvey(formData);
+    if (isEdit) {
 
-            alert("Survey Created Successfully!");
+        await updateSurvey(
+            surveyId,
+            formData
+        );
 
-            navigate("/dashboard");
+        toast.success("Survey Updated Successfully!");
 
-        } catch (err) {
+    } else {
 
-            setError(
-                err.response?.data?.detail ||
-                "Failed to create survey."
-            );
+        await createSurvey(formData);
 
-        }
+        toast.success("Survey Created Successfully!");
+    }
+
+    navigate("/dashboard");
+
+} catch (err) {
+
+    setError(
+        err.response?.data?.detail ||
+        (isEdit
+            ? "Failed to update survey."
+            : "Failed to create survey.")
+    );
+
+}
 
         setLoading(false);
     };
@@ -52,7 +101,11 @@ export default function CreateSurvey() {
 
             <div className="card-body">
 
-                <h2>Create Survey</h2>
+                <h2>
+                    {isEdit
+                    ? "Edit Survey"
+                    : "Create Survey"}
+                </h2>
 
                 {error && (
                     <div className="alert alert-danger">
@@ -96,11 +149,45 @@ export default function CreateSurvey() {
                     </div>
 
                     <button
-                        className="btn btn-primary"
-                        disabled={loading}
-                    >
-                        {loading ? "Creating..." : "Create Survey"}
-                    </button>
+    className="btn btn-primary"
+    disabled={loading}
+>
+
+    {
+
+        loading ? (
+
+            <>
+
+                <span
+                    className="spinner-border spinner-border-sm me-2"
+                />
+
+                {
+
+                    isEdit
+
+                        ? "Updating..."
+
+                        : "Creating..."
+
+                }
+
+            </>
+
+        ) : (
+
+            isEdit
+
+                ? "Update Survey"
+
+                : "Create Survey"
+
+        )
+
+    }
+
+</button>
 
                 </form>
 

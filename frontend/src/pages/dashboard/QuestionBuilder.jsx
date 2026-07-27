@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 //import { getSurveyById } from "../../services/surveyService";
 import QuestionCard from "../../components/survey/QuestionCard";
 import QuestionForm from "../../components/survey/QuestionForm";
 import PreviewModal from "../../components/survey/PreviewModal";
+import EmptyState from "../../components/common/EmptyState";
 
 import {
     getSurveyById,
@@ -20,6 +22,7 @@ export default function QuestionBuilder() {
     const { surveyId } = useParams();
 
     const [survey, setSurvey] = useState(null);
+    const [saving, setSaving] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [editingQuestion, setEditingQuestion] = useState(null);
@@ -59,7 +62,7 @@ export default function QuestionBuilder() {
 
     } catch (error) {
         console.log(error);
-        alert("Unable to delete question.");
+        toast.error("Unable to delete question.");
     }
 };
 
@@ -109,7 +112,7 @@ const handlePublish = async () => {
 
         console.log("Publish Response:", response);
 
-        alert("Survey published successfully!");
+        toast.success("Survey published successfully!");
 
         await loadSurvey();
 
@@ -122,7 +125,7 @@ const handlePublish = async () => {
         error.response?.data?.message ||
         "Unable to publish survey.";
 
-    alert(message);
+    toast.info(message);
 
     if (error.response?.status === 401) {
         localStorage.removeItem("token");
@@ -159,7 +162,17 @@ const handlePublish = async () => {
             ) : (
 
                 <div className="alert alert-info">
-                    No questions added yet.
+                    <EmptyState
+
+    title="No Questions"
+
+    message="Add your first question."
+
+    buttonText="Add Question"
+
+    onClick={() => setShowForm(true)}
+
+/>
                 </div>
 
             )}
@@ -188,9 +201,10 @@ const handlePublish = async () => {
             {showForm && (
                 <div className="mt-4">
                     <QuestionForm
-                        questionData={editingQuestion}
-                        onSave={handleSaveQuestion}
-                        />
+    loading={saving}
+    questionData={editingQuestion}
+    onSave={handleSaveQuestion}
+/>
                 </div>
             )}
             <PreviewModal
