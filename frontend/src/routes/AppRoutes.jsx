@@ -7,6 +7,7 @@ import PublicSurvey from "../pages/public/PublicSurvey";
 import Dashboard from "../pages/dashboard/Dashboard";
 import CreateSurvey from "../pages/dashboard/CreateSurvey";
 import QuestionBuilder from "../pages/dashboard/QuestionBuilder";
+import SurveyResponses from "../pages/dashboard/SurveyResponses";
 
 import DashboardLayout from "../components/layout/DashboardLayout";
 
@@ -53,6 +54,22 @@ export default function AppRoutes() {
         </ProtectedRoute>
     }
 />
+<Route
+    path="/public/survey/:surveyId"
+    element={<PublicSurvey />}
+/>
+
+<Route
+    path="/survey/:surveyId/responses"
+    element={
+        <ProtectedRoute>
+            <DashboardLayout>
+                <SurveyResponses />
+            </DashboardLayout>
+        </ProtectedRoute>
+    }
+/>
+
 
             </Routes>
         </BrowserRouter>

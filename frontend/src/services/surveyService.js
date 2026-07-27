@@ -87,3 +87,41 @@ export const updateQuestion = async (
 
     return response.data;
 };
+
+// Delete Question
+export const deleteQuestion = async (
+    surveyId,
+    questionId
+) => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await api.delete(
+        `/survey/${surveyId}/question/${questionId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};
+
+// Publish Survey
+export const publishSurvey = async (surveyId) => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await api.patch(
+        `/survey/${surveyId}/publish`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};

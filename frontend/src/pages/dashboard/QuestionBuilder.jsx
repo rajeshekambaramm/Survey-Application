@@ -4,11 +4,14 @@ import { useParams } from "react-router-dom";
 //import { getSurveyById } from "../../services/surveyService";
 import QuestionCard from "../../components/survey/QuestionCard";
 import QuestionForm from "../../components/survey/QuestionForm";
+import PreviewModal from "../../components/survey/PreviewModal";
 
 import {
     getSurveyById,
     addQuestion,
-    updateQuestion
+    updateQuestion,
+    deleteQuestion,
+    publishSurvey
 } from "../../services/surveyService";
 
 
@@ -18,7 +21,7 @@ export default function QuestionBuilder() {
 
     const [survey, setSurvey] = useState(null);
     const [showForm, setShowForm] = useState(false);
-
+    const [showPreview, setShowPreview] = useState(false);
     const [editingQuestion, setEditingQuestion] = useState(null);
 
     useEffect(() => {
@@ -39,9 +42,26 @@ export default function QuestionBuilder() {
     setShowForm(true);
 };
 
-    const handleDelete = (question) => {
-        console.log("Delete:", question);
-    };
+    const handleDelete = async (question) => {
+    const confirmDelete = window.confirm(
+        `Delete "${question.question}"?`
+    );
+    if (!confirmDelete) {
+        return;
+    }
+
+    try {
+        await deleteQuestion(
+            surveyId,
+            question.id // Replace with _id or questionId if needed
+        );
+        await loadSurvey();
+
+    } catch (error) {
+        console.log(error);
+        alert("Unable to delete question.");
+    }
+};
 
     const handleSaveQuestion = async (data) => {
 
@@ -75,6 +95,41 @@ export default function QuestionBuilder() {
         console.log(error);
 
     }
+
+};
+const handlePublish = async () => {
+
+    if (!window.confirm("Publish this survey?")) {
+        return;
+    }
+
+    try {
+
+        const response = await publishSurvey(surveyId);
+
+        console.log("Publish Response:", response);
+
+        alert("Survey published successfully!");
+
+        await loadSurvey();
+
+    }catch (error) {
+
+    console.error(error);
+
+    const message =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        "Unable to publish survey.";
+
+    alert(message);
+
+    if (error.response?.status === 401) {
+        localStorage.removeItem("token");
+        window.location.href = "/";
+    }
+
+}
 
 };
 
@@ -111,9 +166,23 @@ export default function QuestionBuilder() {
 
             <button
                 className="btn btn-primary mt-3"
+                disabled={survey?.status === "published"}
                 onClick={() => setShowForm(!showForm)}
             >
                 {showForm ? "Close Form" : "+ Add Question"}
+            </button>
+
+            <button
+                className="btn btn-success mt-3 ms-2"
+                onClick={() => setShowPreview(true)}
+            >
+                Preview Survey
+            </button>
+            <button
+                className="btn btn-warning mt-3 ms-2"
+                onClick={handlePublish}
+            >
+                Publish Survey
             </button>
 
             {showForm && (
@@ -124,7 +193,11 @@ export default function QuestionBuilder() {
                         />
                 </div>
             )}
-
+            <PreviewModal
+                show={showPreview}
+                onClose={() => setShowPreview(false)}
+                survey={survey}
+            />
         </div>
     );
 

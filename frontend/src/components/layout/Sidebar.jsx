@@ -19,7 +19,7 @@ export default function Sidebar() {
                 </li>
 
                 <li className="nav-item">
-                    <Link className="nav-link text-white" to="/surveys">
+                    <Link className="nav-link text-white" to="/dashboard">
                         My Surveys
                     </Link>
                 </li>

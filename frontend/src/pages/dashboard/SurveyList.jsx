@@ -107,6 +107,15 @@ export default function SurveyList() {
     >
         Questions
     </button>
+    
+    <button
+    className="btn btn-info btn-sm me-2"
+    onClick={() =>
+        navigate(`/survey/${survey.id}/responses`)
+    }
+>
+    Responses
+</button>
 
     <button
         className="btn btn-warning btn-sm me-2"

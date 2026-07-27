@@ -67,17 +67,17 @@ def get_survey_by_id(survey_id, current_user):
         }
 
     return {
-        "success": True,
         "survey": {
             "id": str(survey["_id"]),
             "title": survey["title"],
             "description": survey["description"],
+            "status": survey["status"],
             "questions": survey["questions"],
-            "createdBy": survey["createdBy"],
             "createdAt": survey["createdAt"],
             "updatedAt": survey["updatedAt"]
+}
         }
-    }
+    
 
 
 def update_survey(survey_id, data, current_user):

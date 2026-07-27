@@ -52,7 +52,7 @@ useEffect(() => {
         onSave({
             question,
             type,
-            options
+            options: type === "radio" ? options : []
         });
 
         setQuestion("");
