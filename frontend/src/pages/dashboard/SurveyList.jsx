@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
 
 import EmptyState from "../../components/common/EmptyState";
+import LoadingCard from "../../components/common/LoadingCard";
+import SurveyCard from "../../components/dashboard/SurveyCard";
 
 
 export default function SurveyList() {
@@ -93,23 +95,11 @@ const handleDelete = async (surveyId) => {
 
     return (
 
-        <div
-            className="d-flex justify-content-center align-items-center"
-            style={{ height: "60vh" }}
-        >
+        <div>
 
-            <div className="text-center">
-
-                <Spinner
-                    animation="border"
-                    variant="primary"
-                />
-
-                <h5 className="mt-3">
-                    Loading Surveys...
-                </h5>
-
-            </div>
+            <LoadingCard />
+            <LoadingCard />
+            <LoadingCard />
 
         </div>
 
@@ -185,122 +175,34 @@ const handleDelete = async (surveyId) => {
 
 </div>
 
-            <table className="table table-bordered table-hover">
+            <div className="mt-4">
 
-                <thead className="table-dark">
+    {
 
-                    <tr>
+        surveys.length === 0 ? (
 
-                        <th>Title</th>
+            <div className="alert alert-info">
 
-                        <th>Status</th>
+                No surveys found
 
-                        <th>Created</th>
+            </div>
 
-                        <th>Actions</th>
+        ) : (
 
-                    </tr>
+            surveys.map((survey) => (
 
-                </thead>
+                <SurveyCard
+                    key={survey.id}
+                    survey={survey}
+                />
 
-                <tbody>
+            ))
 
-                    {filteredSurveys.length === 0 ? (
-
-    <tr>
-
-        <td colSpan="4">
-
-            <EmptyState
-
-                title="No Surveys Yet"
-
-                message="Create your first survey to start collecting responses."
-
-                buttonText="Create Survey"
-
-                onClick={() =>
-                    navigate("/create-survey")
-                }
-
-            />
-
-        </td>
-
-    </tr>
-
-) : (
-
-                        filteredSurveys.map((survey) => (
-
-                            <tr key={survey.id}>
-
-                                <td>{survey.title}</td>
-
-                                <td>{survey.status}</td>
-
-                                <td>{survey.createdAt}</td>
-
-                                <td>
-
-    <button
-        className="btn btn-primary btn-sm me-2"
-        onClick={() =>
-            navigate(`/survey/${survey.id}/questions`)
-        }
-    >
-        Questions
-    </button>
-    
-    <button
-    className="btn btn-info btn-sm me-2"
-    onClick={() =>
-        navigate(`/survey/${survey.id}/responses`)
-    }
->
-    Responses
-</button>
-
-<button
-    className="btn btn-success btn-sm me-2"
-    onClick={() =>
-        navigate(
-            `/survey/${survey.id}/analytics`
         )
+
     }
->
-    Analytics
-</button>
 
-    <button
-        className="btn btn-warning btn-sm me-2"
-        onClick={() =>
-            navigate(`/edit-survey/${survey.id}`)
-        }
-    >
-        Edit
-    </button>
-
-    <button
-        className="btn btn-danger btn-sm"
-        onClick={() =>
-            handleDelete(survey.id)
-        }
-    >
-        Delete
-    </button>
-
-</td>
-                            </tr>
-
-                        ))
-
-                    )}
-
-                </tbody>
-
-            </table>
-
+</div>
         </div>
 
     );

@@ -4,6 +4,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import PublicSurvey from "../pages/public/PublicSurvey";
+import Profile from "../pages/dashboard/Profile";
 import Dashboard from "../pages/dashboard/Dashboard";
 import CreateSurvey from "../pages/dashboard/CreateSurvey";
 import QuestionBuilder from "../pages/dashboard/QuestionBuilder";
@@ -105,6 +106,16 @@ export default function AppRoutes() {
     }
 />
 
+<Route
+    path="/profile"
+    element={
+        <ProtectedRoute>
+            <DashboardLayout>
+                <Profile />
+            </DashboardLayout>
+        </ProtectedRoute>
+    }
+/>
 
 
             </Routes>

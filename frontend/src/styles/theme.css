@@ -1,0 +1,47 @@
+body[data-theme="light"]{
+
+    background:#f8f9fa;
+
+    color:#212529;
+
+}
+
+body[data-theme="dark"]{
+
+    background:#121212;
+
+    color:#ffffff;
+
+}
+
+body[data-theme="dark"] .card{
+
+    background:#1e1e1e;
+
+    color:rgb(251, 251, 251);
+
+}
+
+body[data-theme="dark"] .navbar{
+
+    background:#100f0f !important;
+
+}
+
+body[data-theme="dark"] .sidebar{
+
+    background:#20201f !important;
+
+}
+
+body[data-theme="dark"] .table{
+
+    color:rgb(255, 255, 255);
+
+}
+
+body[data-theme="dark"] .table-dark{
+
+     background:#222;
+
+}

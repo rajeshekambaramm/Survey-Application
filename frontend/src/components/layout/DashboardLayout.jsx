@@ -1,22 +1,38 @@
+import { useState } from "react";
+
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
 export default function DashboardLayout({ children }) {
-    return (
-        <div className="d-flex">
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
-            <Sidebar />
+    return (
+
+        <div
+            className="d-flex"
+            style={{
+                minHeight: "100vh",
+                background: "#f8f9fa"
+            }}
+        >
+
+            <Sidebar
+                open={sidebarOpen}
+                setOpen={setSidebarOpen}
+            />
 
             <div className="flex-grow-1">
 
-                <Navbar />
-
+                <Navbar
+                    toggleSidebar={() =>
+                        setSidebarOpen(!sidebarOpen)
+                    }
+                />
                 <div className="container mt-4">
                     {children}
                 </div>
 
             </div>
-
         </div>
     );
 }

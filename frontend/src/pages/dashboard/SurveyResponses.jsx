@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { getResponses } from "../../services/responseService";
 import EmptyState from "../../components/common/EmptyState";
+import { exportResponsesToExcel } from "../../utils/exportExcel";
 
 export default function SurveyResponses() {
 
@@ -17,26 +18,43 @@ export default function SurveyResponses() {
     }, []);
 
     const loadResponses = async () => {
-
-        try {
-
-            const data = await getResponses(surveyId);
-
-            setResponses(data.responses);
-
-        } catch (error) {
-
-            console.log(error);
-
-        }
-
-    };
+    try {
+        const data = await getResponses(surveyId);
+        console.log(data);
+        console.log(data.responses);
+        setResponses(data.responses);
+    } catch (error) {
+        console.log(error);
+    }
+};
 
     return (
 
         <div className="container mt-4">
 
-            <h2>Survey Responses</h2>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+
+    <h2>
+
+        Survey Responses
+
+    </h2>
+
+    <button
+        className="btn btn-success"
+        onClick={() =>
+            exportResponsesToExcel(
+                responses,
+                "Survey"
+            )
+        }
+    >
+
+        Export Excel
+
+    </button>
+
+</div>
 
             <p>Total Responses: {responses.length}</p>
 
