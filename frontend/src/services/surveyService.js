@@ -126,6 +126,25 @@ export const publishSurvey = async (surveyId) => {
     return response.data;
 };
 
+// Close Survey
+export const closeSurvey = async (surveyId) => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await api.patch(
+        `/survey/${surveyId}/close`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+
+};
+
 // Get Response Details
 
 export const getResponseDetails = async (
@@ -270,4 +289,3 @@ export async function getSurvey(surveyId) {
 
 }
 
-//

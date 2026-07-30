@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-//import { getSurveys } from "../../services/surveyService";
+
 import {
     getSurveys,
-    deleteSurvey
+    deleteSurvey,
+    publishSurvey,
+    closeSurvey
 } from "../../services/surveyService";
 
 import {
@@ -63,6 +65,46 @@ const handleDelete = async (surveyId) => {
         console.log(error);
 
         errorToast("Unable to delete survey.");
+
+    }
+
+};
+
+const handlePublish = async (surveyId) => {
+
+    try {
+
+        await publishSurvey(surveyId);
+
+        successToast("Survey published successfully.");
+
+        loadSurveys();
+
+    } catch (error) {
+
+        console.log(error);
+
+        errorToast("Unable to publish survey.");
+
+    }
+
+};
+
+const handleCloseSurvey = async (surveyId) => {
+
+    try {
+
+        await closeSurvey(surveyId);
+
+        successToast("Survey closed successfully.");
+
+        loadSurveys();
+
+    } catch (error) {
+
+        console.log(error);
+
+        errorToast("Unable to close survey.");
 
     }
 
@@ -198,6 +240,8 @@ const handleDelete = async (surveyId) => {
                     key={survey.id}
                     survey={survey}
                     onDelete={handleDelete}
+                    onPublish={handlePublish}
+                    onClose={handleCloseSurvey}
                 />
 
             ))

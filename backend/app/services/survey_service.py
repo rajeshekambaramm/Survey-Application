@@ -45,12 +45,32 @@ def get_my_surveys(current_user):
 
     for survey in surveys:
 
+        response_count = responses_collection.count_documents(
+            {
+                "surveyId": str(survey["_id"])
+            }
+        )
+
         survey_list.append({
+
             "id": str(survey["_id"]),
-            "title": survey["title"],
-            "description": survey["description"],
-            "questions": len(survey["questions"]),
-            "createdAt": survey["createdAt"]
+
+            "title": survey.get("title"),
+
+            "description": survey.get("description"),
+
+            "status": survey.get("status", "draft"),
+
+            "questions": survey.get("questions", []),
+
+            "questionCount": len(
+                survey.get("questions", [])
+            ),
+
+            "responseCount": response_count,
+
+            "createdAt": survey.get("createdAt")
+
         })
 
     return survey_list

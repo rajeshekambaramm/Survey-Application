@@ -12,20 +12,26 @@ import SurveyOverview from "../../components/dashboard/SurveyOverview";
 export default function Dashboard() {
 
     const [surveys, setSurveys] = useState([]);
-    useEffect(() => {
-        loadDashboard();
-    }, []);
 
-    
+    useEffect(() => { loadDashboard(); }, []);
+
     const loadDashboard = async () => {
+
         try {
+
             const data = await getSurveys();
-            setSurveys(data.surveys || []);
+
+console.log("Dashboard API:", data);
+
+setSurveys(data);
+
         } catch (error) {
+
             console.log(error);
+
         }
+
     };
-    
     const totalResponses = surveys.reduce(
         (sum, survey) => sum + (survey.responseCount || 0),
         0
@@ -42,62 +48,63 @@ export default function Dashboard() {
 
         <div>
 
-    <div className="mb-5">
+            <div className="mb-5">
 
-        <h2 className="fw-bold">
-            📊 Survey Dashboard
-        </h2>
+                <h2 className="fw-bold">
+                    📊 Survey Dashboard
+                </h2>
 
-        <p className="text-muted mb-0">
-            Welcome back! Manage your surveys from one place.
-        </p>
+                <p className="text-muted mb-0">
+                    Welcome back! Manage your surveys from one place.
+                </p>
 
-    </div>
+            </div>
 
-    <DashboardStats
-    total={total}
-    published={published}
-    draft={draft}
-    responses={totalResponses}
-/>
-<Row className="mt-4">
+            <DashboardStats
+                total={total}
+                published={published}
+                draft={draft}
+                responses={totalResponses}
+            />
+            <Row className="mt-4">
 
-    <Col lg={6}>
-        <SurveyPieChart
-            published={published}
-            draft={draft}
-        />
-    </Col>
+                <Col lg={6}>
+                    <SurveyPieChart
+                        published={published}
+                        draft={draft}
+                    />
+                </Col>
 
-    <Col lg={6}>
-        <RecentSurveys
-            surveys={surveys}
-        />
-    </Col>
+                <Col lg={6}>
+                    <RecentSurveys
+                        surveys={surveys}
+                    />
+                </Col>
 
-</Row>
-    
-<hr className="my-5" />
+            </Row>
 
-<QuickActions />
+            <hr className="my-5" />
 
-<hr className="my-5" />
+            <QuickActions />
 
-<h3 className="mb-3">
-    Survey Analytics
-</h3>
-<Card className="shadow border-0">
-    <Card.Body>
-        <SurveyChart surveys={surveys} />
-    </Card.Body>
-</Card>
+            <hr className="my-5" />
 
-<hr className="my-5" />
+            <h3 className="mb-3">
+                Survey Analytics
+            </h3>
+            <Card className="shadow border-0">
+                <Card.Body>
+                    <SurveyChart surveys={surveys} />
+                </Card.Body>
+            </Card>
 
-<h3 className="mb-4">
-    All Surveys
-</h3>
-<SurveyOverview surveys={surveys} />
+            <hr className="my-5" />
+
+            <h3 className="mb-4">
+                All Surveys
+            </h3>
+            <SurveyOverview surveys={surveys} />
+            
         </div>
     );
 }
