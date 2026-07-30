@@ -24,8 +24,9 @@ from app.services.survey_service import (
     publish_survey,
     close_survey,
     get_survey_responses,
+    get_survey_analytics,
     get_response_details,
-    get_survey_analytics
+    get_dashboard_analytics
 )
 
 
@@ -52,6 +53,13 @@ def get_surveys(
 ):
     return get_my_surveys(current_user)
 
+@router.get("/analytics/dashboard")
+def dashboard_analytics(
+    current_user=Depends(get_current_user)
+):
+    return get_dashboard_analytics(
+        current_user["_id"]
+    )
 
 @router.get("/{survey_id}")
 def get_survey(
@@ -135,18 +143,7 @@ def delete_question_route(
         current_user
     )
     
-@router.delete("/{survey_id}/question/{question_id}")
-def delete_question_route(
-    survey_id: str,
-    question_id: str,
-    current_user=Depends(get_current_user)
-):
-    return delete_question(
-        survey_id,
-        question_id,
-        current_user
-    )
-    
+   
 @router.patch("/{survey_id}/publish")
 def publish(
     survey_id: str,
@@ -200,3 +197,4 @@ def analytics(
         survey_id,
         current_user
     )
+    

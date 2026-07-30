@@ -15,7 +15,7 @@ export default function SurveyResponses() {
 
     useEffect(() => {
         loadResponses();
-    }, []);
+}, []);
 
     const loadResponses = async () => {
     try {

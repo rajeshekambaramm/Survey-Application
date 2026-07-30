@@ -1,9 +1,45 @@
 import { Card, Badge, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-export default function SurveyCard({ survey }) {
+import {
+    FaEye,
+    FaLink,
+    FaExternalLinkAlt
+} from "react-icons/fa";
+
+import { copySurveyLink }
+from "../../utils/copyLink";
+
+import { useState } from "react";
+
+import SurveyPreviewModal
+from "./SurveyPreviewModal";
+
+import { getSurvey }
+from "../../services/surveyService";
+
+
+export default function SurveyCard({
+    survey,
+    onDelete
+}) {
 
     const navigate = useNavigate();
+    const [showPreview, setShowPreview] = useState(false);
+
+const [previewSurvey, setPreviewSurvey] = useState(null);
+
+const previewSurvey = async () => {
+
+    const data = await getSurvey(
+        survey.id
+    );
+
+    setPreviewSurvey(data);
+
+    setShowPreview(true);
+
+};
 
     return (
 
@@ -97,9 +133,78 @@ export default function SurveyCard({ survey }) {
                     <Button
                         size="sm"
                         variant="danger"
+                        onClick={() => onDelete(survey.id)}
                     >
                         Delete
                     </Button>
+
+                    <Button
+    size="sm"
+    variant="success"
+    className="me-2"
+    onClick={() => {
+        console.log("Analytics clicked");
+        console.log(survey.id);
+        navigate(`/survey/${survey.id}/analytics`);
+    }}
+>
+    Analytics
+</Button>
+
+<Button
+    variant="secondary"
+    size="sm"
+    className="me-2"
+    onClick={previewSurvey}
+>
+
+    <FaEye />
+
+    {" "}Preview
+
+</Button>
+
+<Button
+    variant="dark"
+    size="sm"
+    className="me-2"
+    onClick={() =>
+        copySurveyLink(survey.id)
+    }
+>
+
+    <FaLink />
+
+    {" "}Copy Link
+
+</Button>
+
+<Button
+    variant="success"
+    size="sm"
+    onClick={() =>
+        window.open(
+            `/public/survey/${survey.id}`,
+            "_blank"
+        )
+    }
+>
+
+    <FaExternalLinkAlt />
+
+    {" "}Open
+
+</Button>
+
+<SurveyPreviewModal
+
+    show={showPreview}
+
+    onHide={() => setShowPreview(false)}
+
+    survey={previewSurvey}
+
+/>
 
                 </div>
 

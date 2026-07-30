@@ -6,6 +6,7 @@ import {
     getSurveyById
 } from "../../services/surveyService";
 import { toast } from "react-toastify";
+import { successToast } from "../../utils/alerts";
 
 export default function CreateSurvey() {
 

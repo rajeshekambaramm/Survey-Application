@@ -221,3 +221,53 @@ export const updateSurvey = async (
 
     return response.data;
 };
+
+// Get Survey Analytics
+export const getAnalytics = async (surveyId) => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await api.get(
+        `/survey/${surveyId}/analytics`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+};
+
+// Dashboard Analytics
+export const getDashboardAnalytics = async () => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await api.get(
+        "/survey/analytics/dashboard",
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response.data;
+
+};
+
+//
+export async function getSurvey(surveyId) {
+
+    const response = await api.get(
+
+        `/survey/${surveyId}`
+
+    );
+
+    return response.data;
+
+}
+
+//

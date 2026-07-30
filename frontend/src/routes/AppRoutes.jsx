@@ -5,12 +5,12 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import PublicSurvey from "../pages/public/PublicSurvey";
 import Profile from "../pages/dashboard/Profile";
+import Analytics from "../pages/dashboard/Analytics";
 import Dashboard from "../pages/dashboard/Dashboard";
 import CreateSurvey from "../pages/dashboard/CreateSurvey";
 import QuestionBuilder from "../pages/dashboard/QuestionBuilder";
 import SurveyResponses from "../pages/dashboard/SurveyResponses";
 import ResponseDetails from "../pages/dashboard/ResponseDetails";
-import SurveyAnalytics from "../pages/dashboard/SurveyAnalytics";
 
 import DashboardLayout from "../components/layout/DashboardLayout";
 
@@ -95,16 +95,6 @@ export default function AppRoutes() {
     }
 />
 
-<Route
-    path="/survey/:surveyId/analytics"
-    element={
-        <ProtectedRoute>
-            <DashboardLayout>
-                <SurveyAnalytics />
-            </DashboardLayout>
-        </ProtectedRoute>
-    }
-/>
 
 <Route
     path="/profile"
@@ -117,6 +107,27 @@ export default function AppRoutes() {
     }
 />
 
+<Route
+    path="/survey/:surveyId/analytics"
+    element={
+        <ProtectedRoute>
+            <DashboardLayout>
+                <Analytics />
+            </DashboardLayout>
+        </ProtectedRoute>
+    }
+/>
+
+<Route
+    path="/analytics"
+    element={
+        <ProtectedRoute>
+            <DashboardLayout>
+                <Analytics />
+            </DashboardLayout>
+        </ProtectedRoute>
+    }
+/>
 
             </Routes>
         </BrowserRouter>

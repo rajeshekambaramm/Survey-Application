@@ -119,7 +119,7 @@ const loadProfile = async () => {
                 </NavLink>
 
                 <NavLink
-                    to="/dashboard"
+                    to="/analytics"
                     onClick={() => setOpen(false)}
                     className="sidebar-link"
                 >

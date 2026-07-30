@@ -6,8 +6,11 @@ import {
     deleteSurvey
 } from "../../services/surveyService";
 
-import { toast } from "react-toastify";
-import { Spinner } from "react-bootstrap";
+import {
+    confirmDelete,
+    successToast,
+    errorToast
+} from "../../utils/alerts";
 
 import EmptyState from "../../components/common/EmptyState";
 import LoadingCard from "../../components/common/LoadingCard";
@@ -43,15 +46,15 @@ export default function SurveyList() {
 
 const handleDelete = async (surveyId) => {
 
-    const confirmDelete = window.confirm(
-        "Delete this survey?"
-    );
+    const confirmed = await confirmDelete();
 
-    if (!confirmDelete) return;
+    if (!confirmed) return;
 
     try {
 
         await deleteSurvey(surveyId);
+
+        successToast("Survey deleted successfully.");
 
         loadSurveys();
 
@@ -59,7 +62,7 @@ const handleDelete = async (surveyId) => {
 
         console.log(error);
 
-        toast.error("Unable to delete survey.");
+        errorToast("Unable to delete survey.");
 
     }
 
@@ -189,11 +192,12 @@ const handleDelete = async (surveyId) => {
 
         ) : (
 
-            surveys.map((survey) => (
+            filteredSurveys.map((survey) => (
 
                 <SurveyCard
                     key={survey.id}
                     survey={survey}
+                    onDelete={handleDelete}
                 />
 
             ))

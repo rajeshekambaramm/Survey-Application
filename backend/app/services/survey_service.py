@@ -1,8 +1,10 @@
 import uuid
 from datetime import datetime
+from collections import defaultdict
 from app.database import surveys_collection
 from app.database import responses_collection
 from collections import Counter
+from collections import defaultdict
 
 from bson import ObjectId
 
@@ -497,5 +499,97 @@ def get_survey_by_id(survey_id, current_user):
             "createdAt": survey["createdAt"],
             "updatedAt": survey["updatedAt"]
         }
+
+    }
+    
+from collections import defaultdict
+
+def get_dashboard_analytics(user_id):
+
+    surveys = list(
+        surveys_collection.find(
+            {
+                "createdBy": str(user_id)
+            }
+        )
+    )
+
+    total_surveys = len(surveys)
+
+    published = sum(
+        1
+        for survey in surveys
+        if survey.get("status") == "published"
+    )
+
+    draft = sum(
+        1
+        for survey in surveys
+        if survey.get("status") == "draft"
+    )
+
+    survey_ids = [
+        str(survey["_id"])
+        for survey in surveys
+    ]
+
+    total_responses = responses_collection.count_documents(
+        {
+            "surveyId": {
+                "$in": survey_ids
+            }
+        }
+    )
+
+    # ----------------------------
+    # Response Trend
+    # ----------------------------
+
+    response_trend = defaultdict(int)
+
+    responses = list(
+        responses_collection.find(
+            {
+                "surveyId": {
+                    "$in": survey_ids
+                }
+            }
+        )
+    )
+
+    for response in responses:
+
+        submitted = response.get("submittedAt")
+
+        if submitted:
+
+            day = submitted.strftime("%Y-%m-%d")
+
+            response_trend[day] += 1
+
+    return {
+
+        "success": True,
+
+        "totalSurveys": total_surveys,
+
+        "published": published,
+
+        "draft": draft,
+
+        "totalResponses": total_responses,
+
+        "trend": [
+
+            {
+                "date": day,
+                "responses": count
+            }
+
+            for day, count in sorted(
+                response_trend.items()
+            )
+
+        ]
 
     }
